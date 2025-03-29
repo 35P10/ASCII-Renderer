@@ -183,7 +183,7 @@ public:
             clearConsole();
             printCanvas();
             rotationAngle += rotationSpeed;
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
     }
 
@@ -218,9 +218,21 @@ public:
 
                 if (face.mNumIndices != 3) continue;
 
-                aiVector3D v0 = rotateY(mesh->mVertices[face.mIndices[0]], rotationAngle);
-                aiVector3D v1 = rotateY(mesh->mVertices[face.mIndices[1]], rotationAngle);
-                aiVector3D v2 = rotateY(mesh->mVertices[face.mIndices[2]], rotationAngle);
+                float distanceFromCamera = 7.f;
+                aiVector3D center(0, 0, 0);
+
+                aiVector3D v0 = rotateY(mesh->mVertices[face.mIndices[0]] - center, rotationAngle) + center;
+                aiVector3D v1 = rotateY(mesh->mVertices[face.mIndices[1]] - center, rotationAngle) + center;
+                aiVector3D v2 = rotateY(mesh->mVertices[face.mIndices[2]] - center, rotationAngle) + center;
+
+                v0.y = -v0.y;
+                v1.y = -v1.y;
+                v2.y = -v2.y;
+
+                aiVector3D offset(0, 0, -distanceFromCamera);
+                v0 = v0 + offset;
+                v1 = v1 + offset;
+                v2 = v2 + offset;
 
                 // calcular la normal del triangulo
                 aiVector3D normal = calculateNormal(v0, v1, v2);
