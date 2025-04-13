@@ -4,7 +4,7 @@ using namespace std;
 
 int main() {
     ASCIIRenderer renderer;
-    std::string modelPath = "data/teapot.obj";
+    std::string modelPath = "data/dragon.obj";
 
     try {
         renderer.renderLoop(modelPath);
